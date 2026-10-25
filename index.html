@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>國中會考英文片語 - 文法選擇題測驗（25題）</title>
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1c2128; --line:#30363d;
+  --text:#e6edf3; --muted:#9198a1;
+  --accent:#e8643a; --accent2:#4fc3f7;
+  --ok:#56d364; --ok-bg:rgba(86,211,100,.14); --ok-line:rgba(86,211,100,.5);
+  --bad:#ff6b6b; --bad-bg:rgba(255,107,107,.15); --bad-line:rgba(255,107,107,.55);
+  --warn:#ffb74d;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%}
+body{
+  background:
+    radial-gradient(1200px 700px at 8% -12%, rgba(232,100,58,.18), transparent 62%),
+    radial-gradient(1000px 700px at 108% 112%, rgba(79,195,247,.15), transparent 62%),
+    var(--bg);
+  color:var(--text);
+  font-family:"PingFang TC","Microsoft JhengHei",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow:hidden;
+}
+[hidden]{display:none !important}
+button{font-family:inherit;cursor:pointer}
+
+/* ================= 螢幕切換 ================= */
+.screen{display:none;height:100%;flex-direction:column}
+.screen.on{display:flex}
+
+/* ================= 開始畫面 ================= */
+#screen-start{align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+.start-card{width:min(760px,100%);text-align:center}
+.brand{
+  display:inline-block;font-size:13px;letter-spacing:.32em;font-weight:800;
+  color:#0d1117;background:linear-gradient(90deg,var(--accent),var(--warn));
+  padding:6px 16px;border-radius:999px;margin-bottom:18px;
+}
+.start-card h1{font-size:clamp(28px,5vw,44px);margin:0 0 6px;letter-spacing:-.5px}
+.start-card h1 em{font-style:normal;color:var(--accent)}
+.sub{color:var(--muted);font-size:16px;margin:0 0 30px;line-height:1.7}
+.rules{
+  list-style:none;padding:0;margin:0 0 28px;text-align:left;
+  background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;
+}
+.rules li{display:flex;gap:12px;padding:13px 18px;font-size:14.5px;line-height:1.6;border-bottom:1px solid var(--line)}
+.rules li:last-child{border-bottom:0}
+.rules .ic{flex:0 0 24px;text-align:center}
+.rules b{color:var(--text)}
+.rules span.txt{color:var(--muted)}
+.start-actions{display:flex;gap:12px;justify-content:center}
+.btn{
+  border:0;border-radius:12px;padding:15px 34px;font-size:17px;font-weight:800;
+  transition:.16s;letter-spacing:.02em;
+}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(135deg,var(--accent),#f0843f);color:#fff;box-shadow:0 8px 24px rgba(232,100,58,.35)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--muted);border:1.5px solid var(--line)}
+.btn.ghost:hover{border-color:var(--bad);color:var(--bad)}
+
+/* ================= 測驗畫面 ================= */
+.qbar{
+  display:flex;align-items:center;gap:16px;padding:12px 18px;
+  background:rgba(13,17,23,.86);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);flex:0 0 auto;z-index:5;
+}
+.qbar-mid{flex:1;display:flex;align-items:center;gap:14px;min-width:0}
+.pbar{flex:1;height:9px;background:var(--panel2);border-radius:99px;overflow:hidden;min-width:60px}
+.pbar-fill{height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .3s ease}
+.qcount{font-size:14px;font-weight:700;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.qcount b{color:var(--text)}
+.qbar-right{display:flex;align-items:center;gap:10px}
+.tally{font-size:13.5px;font-weight:800;font-variant-numeric:tabular-nums;padding:4px 11px;border-radius:8px}
+.tally.ok{background:var(--ok-bg);color:var(--ok)}
+.tally.bad{background:var(--bad-bg);color:var(--bad)}
+.btn.mini{padding:7px 14px;font-size:13.5px;border-radius:9px;background:transparent;color:var(--muted);border:1.5px solid var(--line);font-weight:700}
+.btn.mini:hover{border-color:var(--bad);color:var(--bad)}
+
+.qbody{
+  flex:1;overflow-y:auto;padding:26px 18px 44px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.qinner{width:min(860px,100%)}
+
+.stem-card{
+  background:var(--panel);border:1px solid var(--line);border-radius:20px;
+  padding:26px 26px 22px;text-align:center;margin-bottom:22px;position:relative;overflow:hidden;
+}
+.stem-card::before{
+  content:'';position:absolute;inset:0 0 auto 0;height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.stem{font-weight:800;font-size:clamp(28px,5.5vw,46px);line-height:1.5;word-break:break-word;letter-spacing:-.02em}
+.blank{display:inline-block;width:210px;height:34px;border-bottom:2px solid var(--accent2);margin:0 8px;vertical-align:middle}
+.stem-hint{margin-top:14px;font-size:14px;color:var(--muted);letter-spacing:.12em}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{
+  display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;
+  background:var(--panel);border:2px solid var(--line);border-radius:14px;
+  padding:16px 18px;color:var(--text);font-size:17px;line-height:1.55;
+  transition:.15s;min-height:60px;
+}
+.opt:hover:not(:disabled){border-color:var(--accent2);background:var(--panel2);transform:translateY(-2px)}
+.opt:disabled{cursor:default}
+.key{
+  flex:0 0 26px;height:26px;border-radius:8px;background:var(--panel2);
+  border:1px solid var(--line);display:grid;place-items:center;
+  font-size:13.5px;font-weight:800;color:var(--muted);margin-top:1px;
+}
+.otext{flex:1;word-break:break-word}
+.opts.locked .opt{pointer-events:none}
+.opt.is-ok{border-color:var(--ok);background:var(--ok-bg)}
+.opt.is-ok .key{background:var(--ok);border-color:var(--ok);color:#06230f}
+.opt.is-bad{border-color:var(--bad);background:var(--bad-bg)}
+.opt.is-bad .key{background:var(--bad);border-color:var(--bad);color:#3a0806}
+.opt.faded{opacity:.42}
+
+/* 回饋區 */
+.fb{margin-top:20px;border-radius:16px;overflow:hidden;animation:pop .22s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fb-bar{position:relative;padding:18px 22px}
+.fb.ok .fb-bar{background:var(--ok-bg);border:2px solid var(--ok-line)}
+.fb.bad .fb-bar{background:var(--bad-bg);border:2px solid var(--bad-line)}
+.fb-title{font-size:26px;font-weight:900;display:flex;align-items:center;gap:10px}
+.fb.ok .fb-title{color:var(--ok)}
+.fb.bad .fb-title{color:var(--bad)}
+.fb-sub{margin-top:9px;font-size:15px;color:var(--muted);line-height:1.65}
+.fb-ans{
+  margin-top:12px;padding:12px 15px;border-radius:11px;background:rgba(0,0,0,.32);
+  border:1px dashed var(--bad-line);font-size:16.5px;line-height:1.6;
+}
+.fb-ans .lab{display:block;font-size:12.5px;font-weight:800;color:var(--bad);letter-spacing:.14em;margin-bottom:5px}
+.fb-ans .val{color:var(--text);font-weight:800;word-break:break-word}
+.fb-actions{display:flex;gap:11px;margin-top:15px;flex-wrap:wrap}
+.countdown{position:absolute;left:0;bottom:0;height:3px;width:100%;background:rgba(255,255,255,.1)}
+.countdown i{display:block;height:100%;background:var(--ok);transform-origin:left;animation:shrink 1000ms linear forwards}
+@keyframes shrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+.kbd-hint{margin-top:18px;text-align:center;font-size:12.5px;color:#5d6673}
+.kbd-hint kbd{
+  background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:5px;padding:1px 6px;font-family:inherit;font-size:11.5px;color:var(--muted)
+}
+
+/* ================= 結果畫面 ================= */
+#screen-result{overflow:hidden}
+.rhead{flex:0 0 auto;padding:20px 16px 14px;border-bottom:1px solid var(--line);background:rgba(13,17,23,.8)}
+.rhead-in{width:min(1180px,100%);margin:0 auto}
+.rtitle{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.rtitle h1{font-size:26px;margin:0;letter-spacing:-.3px}
+.rtitle .meta{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.score-row{display:flex;align-items:center;gap:26px;flex-wrap:wrap}
+.score-big{display:flex;align-items:baseline;gap:6px}
+.score-big .num{font-size:52px;font-weight:900;letter-spacing:-2px;font-variant-numeric:tabular-nums;
+  background:linear-gradient(135deg,var(--ok),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.score-big .pct{font-size:20px;font-weight:800;color:var(--muted)}
+.stat-pills{display:flex;gap:10px;flex-wrap:wrap}
+.spill{padding:9px 16px;border-radius:11px;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}
+.spill.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+.spill.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-line)}
+.spill.na{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+.ractions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+
+.tabs{display:flex;gap:8px;width:min(1180px,100%);margin:12px auto 0;padding:0 16px;flex:0 0 auto;flex-wrap:wrap}
+.tab{
+  background:var(--panel);border:1.5px solid var(--line);color:var(--muted);
+  padding:9px 18px;border-radius:10px;font-size:14.5px;font-weight:800;transition:.15s;
+}
+.tab:hover{border-color:#4a5260;color:var(--text)}
+.tab.on{background:rgba(232,100,58,.13);border-color:var(--accent);color:var(--accent)}
+.tab .n{font-variant-numeric:tabular-nums;opacity:.75;margin-left:5px}
+
+.rpanel{flex:1;overflow-y:auto;padding:12px 16px 40px}
+.rpanel-in{width:min(1180px,100%);margin:0 auto}
+.filter-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.fchip{
+  background:var(--panel);border:1.5px solid var(--line);color:var(--muted);
+  padding:6px 14px;border-radius:999px;font-size:13px;font-weight:700;
+}
+.fchip.on{border-color:var(--accent2);color:var(--accent2);background:rgba(79,195,247,.1)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table.ans{width:100%;border-collapse:collapse;font-size:14px;min-width:900px}
+table.ans th{
+  position:sticky;top:0;background:var(--panel2);text-align:left;
+  padding:11px 12px;font-size:12px;letter-spacing:.1em;color:var(--muted);
+  border-bottom:2px solid var(--line);z-index:2;white-space:nowrap;
+}
+table.ans td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.55}
+table.ans tr:last-child td{border-bottom:0}
+table.ans tbody tr:hover{background:rgba(255,255,255,.03)}
+.c-no{color:var(--muted);font-variant-numeric:tabular-nums;font-size:13px;width:46px;white-space:nowrap}
+.c-stem{font-weight:800;min-width:170px}
+.c-tag{display:block;font-size:11.5px;color:var(--accent2);font-weight:600;margin-top:4px}
+.c-opts{font-size:13px;color:var(--muted);min-width:260px}
+.c-opts .o{display:block;margin-bottom:2.5px}
+.c-opts .o .k{display:inline-block;min-width:16px;color:#5d6673;font-weight:800}
+.c-opts .o.right{color:var(--ok);font-weight:800}
+.c-opts .o.right .k{color:var(--ok)}
+.c-opts .o.mine{color:var(--bad);font-weight:800;text-decoration:line-through}
+.c-opts .o.mine .k{color:var(--bad)}
+.c-yours{min-width:130px;word-break:break-word}
+.c-yours.miss{color:#5d6673;font-style:italic}
+.c-res{width:70px;white-space:nowrap}
+.tag-res{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:800}
+.tag-res.ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-line)}
+.tag-res.bad{background:var(--bad-bg);color:var(--bad);border:1px solid var(--bad-line)}
+.tag-res.na{background:var(--panel2);color:#5d6673;border:1px solid var(--line)}
+
+.empty{padding:60px 20px;text-align:center;color:var(--muted);font-size:16px;line-height:1.8}
+
+/* 手機 */
+@media (max-width:760px){
+  .opts{grid-template-columns:1fr}
+  .qbar{flex-wrap:wrap;gap:9px;padding:10px 12px}
+  .qbar-mid{order:3;flex:1 0 100%}
+  .qbody{padding:18px 13px 36px}
+  .stem-card{padding:20px 16px 18px;border-radius:16px}
+  .stem{font-size:clamp(22px,4.5vw,34px)}
+  .blank{width:150px;height:28px}
+  .opt{padding:14px 15px;font-size:16px;min-height:54px}
+  .fb-title{font-size:22px}
+  .score-big .num{font-size:40px}
+  .tabs{padding:0 13px}
+  .rpanel{padding:10px 13px 34px}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== 開始畫面 ==================== -->
+<section class="screen on" id="screen-start">
+  <div class="start-card">
+    <div class="brand">國中會考英文片語</div>
+    <h1>文法<em>選擇題</em>測驗</h1>
+    <p class="sub">共 <span id="qCount">30</span> 題 · 每題一個畫面 · 答對自動跳題</p>
+
+    <ul class="rules">
+      <li><span class="ic">✅</span><span class="txt"><b>答對</b>：畫面顯示「正確」，<b>自動跳到下一題</b></span></li>
+      <li><span class="ic">❌</span><span class="txt"><b>答錯</b>：以<b style="color:var(--bad)">紅色</b>標示並<b>顯示正確答案</b>，需<b>手動按下一題</b></span></li>
+      <li><span class="ic">📋</span><span class="txt">完成後顯示<b>詳細答案表</b>（全題答案＋你的作答結果）</span></li>
+      <li><span class="ic">🔤</span><span class="txt">鍵盤：<kbd>1</kbd>–<kbd>4</kbd> 或 <kbd>A</kbd>–<kbd>D</kbd> 選擇 · <kbd>Enter</kbd> 下一題</span></li>
+    </ul>
+
+    <div class="start-actions">
+      <button class="btn primary" id="btnStart" type="button">開始測驗</button>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== 測驗畫面 ==================== -->
+<section class="screen" id="screen-quiz">
+  <header class="qbar">
+    <span class="dir-pill">文法選擇題</span>
+    <div class="qbar-mid">
+      <div class="pbar"><div class="pbar-fill" id="pFill"></div></div>
+      <span class="qcount"><b id="qNow">1</b> / <span id="qTotal">25</span></span>
+    </div>
+    <div class="qbar-right">
+      <span class="tally ok" id="tallyOk">✓ 0</span>
+      <span class="tally bad" id="tallyBad">✗ 0</span>
+      <button class="btn mini" id="btnEnd" type="button">結束</button>
+    </div>
+  </header>
+
+  <main class="qbody">
+    <div class="qinner">
+      <div class="stem-card">
+        <div class="stem" id="qStem">—</div>
+        <div class="stem-hint" id="qHint">請選擇正確答案</div>
+      </div>
+
+      <div class="opts" id="qOpts"></div>
+
+      <div class="fb" id="qFb" hidden aria-live="polite"></div>
+
+      <div class="kbd-hint" id="kbdHint">
+        鍵盤：<kbd>1</kbd>–<kbd>4</kbd> 或 <kbd>A</kbd>–<kbd>D</kbd> 選擇 · <kbd>Enter</kbd> 下一題
+      </div>
+    </div>
+  </main>
+</section>
+
+<!-- ==================== 結果畫面 ==================== -->
+<section class="screen" id="screen-result">
+  <header class="rhead">
+    <div class="rhead-in">
+      <div class="rtitle">
+        <h1>🎯 測驗完成</h1>
+        <div class="meta"><span id="rTotalMeta">共 25 題</span></div>
+      </div>
+      <div class="score-row">
+        <div class="score-big"><span class="num" id="rPct">0%</span></div>
+        <div class="stat-pills">
+          <span class="spill ok" id="rOk">答對 0</span>
+          <span class="spill bad" id="rBad">答錯 0</span>
+          <span class="spill na" id="rNa">未作答 0</span>
+        </div>
+      </div>
+      <div class="ractions">
+        <button class="btn primary" id="btnAgain" type="button">重新測驗一次</button>
+        <button class="btn ghost" id="btnHome" type="button">回首頁</button>
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab on" data-tab="detail" type="button">📋 詳細答案<span class="n" id="tabDetailN">(25)</span></button>
+  </nav>
+
+  <div class="rpanel">
+    <div class="rpanel-in" id="rPanel"></div>
+  </div>
+</section>
+
+<script>
+"use strict";
+const QS = [{"s":"There is _____ milk in the fridge.","o":["a number of","a little","a few","many"],"a":1,"tag":"不定量片語：a little ＋不可數"},{"s":"_____ students are absent today.","o":["A number of","Much","A little","A great deal of"],"a":0,"tag":"不定量片語：a number of ＋可數複數"},{"s":"We need _____ of water.","o":["a slice","a pair","a piece","a bottle"],"a":3,"tag":"容器與單位片語：a bottle of"},{"s":"She bought _____ of bread.","o":["a pair","a slice","a glass","a cup"],"a":1,"tag":"容器與單位片語：a slice of"},{"s":"The table is _____ wood.","o":["made into","made in","made from","made of"],"a":3,"tag":"be made of：原料看得出"},{"s":"Paper is _____ trees.","o":["made of","made from","made in","made into"],"a":1,"tag":"be made from：原料看不出"},{"s":"I'm good _____ math.","o":["for","at","with","in"],"a":1,"tag":"be good at：擅長"},{"s":"She is famous _____ her singing.","o":["as","for","at","with"],"a":1,"tag":"be famous for：以…聞名"},{"s":"We arrived _____ Taipei at 8 p.m.","o":["at","to","on","in"],"a":3,"tag":"arrive in：大地方"},{"s":"The plane arrived _____ the airport.","o":["at","on","in","to"],"a":0,"tag":"arrive at：小地方"},{"s":"We went to school _____ foot yesterday.","o":["in","on","with","by"],"a":1,"tag":"on foot：步行"},{"s":"My father goes to work _____ car.","o":["with","on","in","by"],"a":3,"tag":"by ＋ 交通工具（中間不加冠詞）"},{"s":"_____ the rain, we went out.","o":["In spite of","Thanks to","By the way","Because of"],"a":0,"tag":"in spite of：儘管"},{"s":"I'm _____ my keys. Can you help me find them?","o":["looking for","looking after","looking forward to","looking up"],"a":0,"tag":"look for：尋找"},{"s":"She _____ her little brother when her parents are away.","o":["looks up","looks out","looks after","looks for"],"a":2,"tag":"look after：照顧"},{"s":"Please _____ the new word in the dictionary.","o":["look for","look up","look after","look out"],"a":1,"tag":"look up：查（字典）"},{"s":"We _____ paper, so we need to buy some more.","o":["hand in","ran out of","ran away","break down"],"a":1,"tag":"run out of：用完、耗盡"},{"s":"Never _____ your dreams!","o":["give back","put off","give away","give up"],"a":3,"tag":"give up：放棄"},{"s":"My mom _____ me clean my room yesterday.","o":["made","makes","making","to make"],"a":0,"tag":"make sb ＋ 原形動詞：使某人做"},{"s":"She asked me _____ for her after school.","o":["to wait","waiting","wait","waited"],"a":0,"tag":"ask sb ＋ to V：請某人做"},{"s":"I'm not used _____ up early.","o":["to get","getting","to getting","get"],"a":2,"tag":"be used to ＋ V-ing：習慣於"},{"s":"The box is _____ heavy _____ carry.","o":["so ; that","enough ; to","very ; to","too ; to"],"a":3,"tag":"too ＋ 原級 ＋ to V：太…而不能…"},{"s":"He is _____ to vote.","o":["enough old","old enough","too old","very enough"],"a":1,"tag":"… enough ＋ to V：夠…可以…"},{"s":"_____ you _____ I am wrong.","o":["Either ; or","Neither ; nor","Not only ; but also","Both ; and"],"a":0,"tag":"Either A or B：就近一致（I am）"},{"s":"_____ Tom _____ his parents are coming.","o":["Both ; and","Either ; or","Not only ; but also","Neither ; nor"],"a":2,"tag":"Not only A but also B：就近一致（parents are）"},{"s":"We couldn't play soccer _____ the heavy rain.","o":["because of","because","in spite of","thanks to"],"a":0,"tag":"because of ＋ 名詞片語：因為（後面不能接子句）"},{"s":"I'm _____ seeing you next week.","o":["looking for","looking up","looking after","looking forward to"],"a":3,"tag":"look forward to ＋ V-ing：期待"},{"s":"Many students _____ the speech contest.","o":["took part in","took place","took off","took care of"],"a":0,"tag":"take part in：參加"},{"s":"Who will _____ the baby while we are away?","o":["take care of","take part in","take off","take photos"],"a":0,"tag":"take care of：照顧"},{"s":"She is _____ science and wants to be a scientist.","o":["interested in","good at","afraid of","famous for"],"a":0,"tag":"be interested in：對…有興趣"}];
+const N = QS.length;
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c)=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
+const KEYS = ["A","B","C","D"];
+
+let qi = 0;
+let ans = new Array(N).fill(-1);   // 每題選的選項索引，-1 表示未作答
+let locked = false;
+let timer = null;
+
+function show(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("on"));
+  $(id).classList.add("on");
+}
+
+function updateTally(){
+  let ok=0,bad=0,na=0;
+  for(let i=0;i<N;i++){
+    if(ans[i]<0) na++; else if(ans[i]===QS[i].a) ok++; else bad++;
+  }
+  $("#tallyOk").textContent="✓ "+ok.toLocaleString();
+  $("#tallyBad").textContent="✗ "+bad.toLocaleString();
+}
+
+function renderQ(){
+  clearTimeout(timer);
+  locked=false;
+  const q=QS[qi];
+  $("#qNow").textContent=(qi+1).toLocaleString();
+  $("#pFill").style.width=((qi/N)*100).toFixed(3)+"%";
+  updateTally();
+
+  const stem = q.s.replace("_____", '<span class="blank"></span>');
+  $("#qStem").innerHTML = stem;
+  $("#qHint").textContent="請選擇正確的文法片語／用法";
+
+  const box=$("#qOpts");
+  box.classList.remove("locked");
+  box.innerHTML = q.o.map((t,k)=>
+    `<button class="opt" data-k="${k}" type="button">`+
+    `<span class="key">${KEYS[k]}</span><span class="otext">${esc(t)}</span></button>`
+  ).join("");
+  box.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>answer(+b.dataset.k)));
+
+  $("#qFb").hidden=true;
+  $("#qFb").className="fb";
+  $("#kbdHint").hidden=false;
+}
+
+function answer(k){
+  if(locked) return;
+  const q=QS[qi];
+  locked=true;
+  ans[qi]=k;
+  const ok = k===q.a;
+
+  const box=$("#qOpts");
+  box.classList.add("locked");
+  box.querySelectorAll(".opt").forEach((b,i)=>{
+    if(i===q.a) b.classList.add("is-ok");
+    else if(i===k) b.classList.add("is-bad");
+    else b.classList.add("faded");
+  });
+
+  const fb=$("#qFb");
+  fb.hidden=false;
+  $("#kbdHint").hidden=true;
+
+  if(ok){
+    fb.className="fb ok";
+    fb.innerHTML=
+      `<div class="fb-bar">`+
+        `<div class="fb-title">✅ 正確！</div>`+
+        `<div class="fb-sub">${esc(q.o[q.a])}</div>`+
+        `<div class="countdown"><i></i></div>`+
+      `</div>`;
+    timer=setTimeout(nextQ,1000);
+  } else {
+    fb.className="fb bad";
+    fb.innerHTML=
+      `<div class="fb-bar">`+
+        `<div class="fb-title">❌ 答錯了</div>`+
+        `<div class="fb-sub">你的答案：<b style="color:var(--bad)">${esc(q.o[k])}</b></div>`+
+        `<div class="fb-ans"><span class="lab">正確答案</span><span class="val">${esc(q.o[q.a])}</span></div>`+
+        `<div class="fb-actions"><button class="btn primary" id="btnNext" type="button">下一題 →</button></div>`+
+      `</div>`;
+    $("#btnNext").addEventListener("click",nextQ);
+    $("#btnNext").focus();
+  }
+}
+
+function nextQ(){
+  clearTimeout(timer);
+  if(qi+1>=N){ finish(); return; }
+  qi++;
+  renderQ();
+}
+
+$("#btnEnd").addEventListener("click",()=>{
+  const done=ans.filter(a=>a>=0).length;
+  if(!confirm(`目前進度 ${done} / ${N} 題。\n確定要結束測驗並查看結果嗎？\n（未作答的題目會列入「未作答」）`)) return;
+  finish();
+});
+
+function finish(){
+  clearTimeout(timer);
+  showResults();
+}
+
+function stats(){
+  let ok=0,bad=0,na=0;
+  for(let i=0;i<N;i++){
+    if(ans[i]<0) na++; else if(ans[i]===QS[i].a) ok++; else bad++;
+  }
+  return {ok,bad,na};
+}
+
+function showResults(){
+  clearTimeout(timer);
+  const st=stats();
+  const answered=st.ok+st.bad;
+  $("#rPct").textContent = answered ? Math.round(st.ok/answered*100)+"%" : "—";
+  $("#rOk").textContent="答對 "+st.ok.toLocaleString();
+  $("#rBad").textContent="答錯 "+st.bad.toLocaleString();
+  $("#rNa").textContent="未作答 "+st.na.toLocaleString();
+  $("#rTotalMeta").textContent="共 "+N.toLocaleString()+" 題";
+  $("#tabDetailN").textContent="("+answered.toLocaleString()+")";
+  show("#screen-result");
+  renderPanel();
+}
+
+document.querySelectorAll(".tab").forEach(t=>{
+  t.addEventListener("click",()=>{
+    tab=t.dataset.tab;
+    document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x===t));
+    renderPanel();
+  });
+});
+let tab="detail";
+
+function chunked(el,total,make,done){
+  el.innerHTML="";
+  let i=0; const CH=400;
+  (function step(){
+    const end=Math.min(i+CH,total); let buf="";
+    for(;i<end;i++) buf+=make(i);
+    el.insertAdjacentHTML("beforeend",buf);
+    if(i<total) setTimeout(step,0);
+    else if(done) done();
+  })();
+}
+
+function renderPanel(){
+  const box=$("#rPanel"); box.innerHTML="";
+  if(tab==="detail") renderDetail(box);
+}
+
+function renderDetail(box){
+  const row=document.createElement("div");
+  row.className="filter-row";
+  row.innerHTML=
+    '<button class="fchip on" data-f="all" type="button">全部</button>'+
+    '<button class="fchip" data-f="ok" type="button">僅答對</button>'+
+    '<button class="fchip" data-f="bad" type="button">僅答錯</button>'+
+    '<button class="fchip" data-f="na" type="button">僅未作答</button>';
+  row.querySelectorAll(".fchip").forEach(b=>{
+    b.addEventListener("click",()=>{
+      row.querySelectorAll(".fchip").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on"); renderPanel();
+    });
+  });
+  box.appendChild(row);
+
+  const list=[];
+  for(let i=0;i<N;i++){
+    const f=row.querySelector(".fchip.on").dataset.f;
+    if(f==="ok" && ans[i]!==QS[i].a) continue;
+    if(f==="bad" && !(ans[i]>=0 && ans[i]!==QS[i].a)) continue;
+    if(f==="na" && ans[i]>=0) continue;
+    list.push(i);
+  }
+  if(!list.length){
+    box.insertAdjacentHTML("beforeend",'<div class="empty">此篩選條件下沒有題目。</div>');
+    return;
+  }
+
+  const wrap=document.createElement("div"); wrap.className="tbl-wrap";
+  wrap.innerHTML=
+    '<table class="ans"><thead><tr>'+
+    "<th>題號</th><th>題目</th><th>四個選項（綠＝正確／紅刪除線＝你選的）</th>"+
+    "<th>你的答案</th><th>結果</th><th>考點</th>"+
+    "</tr></thead><tbody></tbody></table>";
+  box.appendChild(wrap);
+  const tb=wrap.querySelector("tbody");
+  const total=list.length;
+
+  chunked(tb,total,(n)=>{
+    const i=list[n]; const q=QS[i];
+    const mine=ans[i]; const right = mine===q.a;
+    const state = mine<0?"na":right?"ok":"bad";
+    const resTxt = mine<0?"未作答":right?"答對":"答錯";
+
+    const optsHtml=q.o.map((t,k)=>{
+      let cls="o";
+      if(k===q.a) cls+=" right";
+      if(k===mine && mine!==q.a) cls+=" mine";
+      return `<span class="${cls}"><span class="k">${KEYS[k]}.</span> ${esc(t)}</span>`;
+    }).join("");
+
+    const yours = mine<0
+      ? '<span class="c-yours miss">未作答</span>'
+      : `<span class="c-yours" style="${right?"":"color:var(--bad)"}">${esc(q.o[mine])}</span>`;
+
+    return `<tr>`+
+      `<td class="c-no">${(i+1).toLocaleString()}</td>`+
+      `<td class="c-stem">${esc(q.s)}<span class="c-tag">${esc(q.tag)}</span></td>`+
+      `<td class="c-opts">${optsHtml}</td>`+
+      `<td class="c-yours">${yours}</td>`+
+      `<td class="c-res"><span class="tag-res ${state}">${resTxt}</span></td>`+
+      `</tr>`;
+  },()=>{
+    box.insertAdjacentHTML("beforeend",`<div class="loading" style="padding:12px 0">已顯示 ${total.toLocaleString()} 筆</div>`);
+  });
+}
+
+/* 鍵盤 */
+document.addEventListener("keydown",ev=>{
+  if(!$("#screen-quiz").classList.contains("on")) return;
+  const k=ev.key;
+  const map={"1":0,"2":1,"3":2,"4":3,"a":0,"b":1,"c":2,"d":3,"A":0,"B":1,"C":2,"D":3};
+  if(!locked && k in map){ ev.preventDefault(); answer(map[k]); return; }
+  if(locked && (k==="Enter"||k===" ")){ ev.preventDefault(); nextQ(); }
+});
+
+/* 按鈕 */
+$("#btnStart").addEventListener("click", () => { ans.fill(-1); qi = 0; show("#screen-quiz"); renderQ(); });
+$("#btnAgain").addEventListener("click",()=>{ ans.fill(-1); qi = 0; show("#screen-start"); });
+$("#btnHome").addEventListener("click",()=>{ ans.fill(-1); qi = 0; show("#screen-start"); });
+
+/* 啟動 */
+(function boot(){ 
+  show("#screen-start");
+  const qc = document.getElementById('qCount'); if(qc) qc.textContent = N.toLocaleString();
+})();
+</script>
+</body>
+</html>
